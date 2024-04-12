@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AlarmManager</string>
+    <string name="alarm">Alarm</string>
+    <string name="alarmSub1">AI generated alarms</string>
+    <string name="bottomNavSub1">Alarm</string>
+    <string name="bottomNavSub2">Bedtime</string>
+    <string name="Bedtime">Bedtime</string>
 </resources>
