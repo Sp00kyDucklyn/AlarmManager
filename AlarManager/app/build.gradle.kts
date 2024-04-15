@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.cursokotlin.alarmmanager"
+    namespace = "com.cursokotlin.alarmanager"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.cursokotlin.alarmmanager"
+        applicationId = "com.cursokotlin.alarmanager"
         minSdk = 27
         targetSdk = 34
         versionCode = 1
@@ -26,19 +26,23 @@ android {
             )
         }
     }
-
-    buildFeatures{
-        viewBinding = true
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
 
+    var navVersion = "2.7.0"
+
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
