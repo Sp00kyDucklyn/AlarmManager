@@ -1,23 +1,22 @@
 package com.cursokotlin.alarmanager
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cursokotlin.alarmanager.model.AlarmData
+import com.cursokotlin.alarmanager.model.WeekDays
 import com.cursokotlin.alarmanager.view.AlarmAdapter2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-
 
 class Alarm : Fragment() {
 
@@ -27,6 +26,8 @@ class Alarm : Fragment() {
     private lateinit var userAdapter: AlarmAdapter2
     private lateinit var picker:MaterialTimePicker
 
+    private lateinit var recyclerView: RecyclerView
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,31 +35,26 @@ class Alarm : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_alarm, container, false)
 
-        val btnAddAlarm:ImageButton =root.findViewById<ImageButton>(R.id.addAlarmButton)
-        btnAddAlarm.setOnClickListener(){
-            showTimePicker()
-        }
+        recyclerView = root.findViewById(R.id.mRecycler)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        /**set List*/
-
+        addsBtn = root.findViewById(R.id.addingBtn)
+        recv = root.findViewById(R.id.mRecycler)
         userList = ArrayList()
-        /**set find Id*/
-        addsBtn = root.findViewById(R.id.addingBtn);
-        recv = root.findViewById(R.id.mRecycler);
-        /**set Adapter*/
-        userAdapter = AlarmAdapter2(requireContext(),userList)
-        /**setRecycler view Adapter*/
-        recv.layoutManager = LinearLayoutManager(requireContext())
+        userAdapter = AlarmAdapter2(requireContext(), userList)
         recv.adapter = userAdapter
-        /**set Dialog*/
-        addsBtn.setOnClickListener { addInfo() }
 
+        addsBtn.setOnClickListener { showTimePicker() }
 
         return root
     }
 
-    private fun showTimePicker() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        deployAlarms()
+    }
 
+    private fun showTimePicker() {
         picker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
             .setHour(12)
@@ -66,49 +62,72 @@ class Alarm : Fragment() {
             .setTitleText("Select Alarm Time")
             .build()
 
-        picker.show(childFragmentManager,"1")
+        picker.show(childFragmentManager, "1")
 
         picker.addOnPositiveButtonClickListener {
+            val hour = picker.hour
+            val minute = picker.minute
+            val timeString = String.format("%02d:%02d", hour, minute)
 
-            if(picker.hour >12){
+            //seleccionar los días de la semana
+            showDaysOfWeekDialog(timeString)
+        }
+    }
 
+    private fun showDaysOfWeekDialog(timeString: String) {
+        val weekDays = WeekDays()
 
+        val daysOfWeek = arrayOf(
+            "Monday", "Tuesday", "Wednesday",
+            "Thursday", "Friday", "Saturday", "Sunday"
+        )
+
+        val checkedDays = booleanArrayOf(
+            weekDays.monday, weekDays.tuesday, weekDays.wednesday,
+            weekDays.thursday, weekDays.friday, weekDays.saturday, weekDays.sunday
+        )
+
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Select Days of the Week")
+        alertDialogBuilder.setMultiChoiceItems(daysOfWeek, checkedDays) { _, which, isChecked ->
+            when (which) {
+                0 -> weekDays.monday = isChecked
+                1 -> weekDays.tuesday = isChecked
+                2 -> weekDays.wednesday = isChecked
+                3 -> weekDays.thursday = isChecked
+                4 -> weekDays.friday = isChecked
+                5 -> weekDays.saturday = isChecked
+                6 -> weekDays.sunday = isChecked
             }
-
         }
 
-
-    }
-
-
-    private fun addInfo() {
-        val inflter = LayoutInflater.from(requireContext())
-        val v = inflter.inflate(R.layout.add_alarma2,null)
-        /**set view*/
-        val userName = v.findViewById<EditText>(R.id.userName)
-        val userNo = v.findViewById<EditText>(R.id.userNo)
-
-        val addDialog = AlertDialog.Builder(requireContext())
-
-        addDialog.setView(v)
-        addDialog.setPositiveButton("Ok"){
-                dialog,_->
-            val names = userName.text.toString()
-            val number = userNo.text.toString()
-            userList.add(AlarmData("Name: $names","Mobile No. : $number"))
-            userAdapter.notifyDataSetChanged()
-            Toast.makeText(requireContext(),"Adding User Information Success", Toast.LENGTH_SHORT).show()
+        alertDialogBuilder.setPositiveButton("Ok") { dialog, _ ->
+            val daysString = weekDays.getAllDaysAsString()
+            createAlarm(timeString, daysString)
             dialog.dismiss()
         }
-        addDialog.setNegativeButton("Cancel"){
-                dialog,_->
-            dialog.dismiss()
-            Toast.makeText(requireContext(),"Cancel", Toast.LENGTH_SHORT).show()
 
+        alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
         }
-        addDialog.create()
-        addDialog.show()
+
+        alertDialogBuilder.create().show()
     }
 
+    private fun createAlarm(timeString: String, daysString: String) {
+        val alarmData = AlarmData(timeString, daysString)
 
+        val dbHandler = AlarmDAO(requireContext())
+        dbHandler.addAlarm(alarmData)
+
+        Toast.makeText(requireContext(), "Alarm added successfully", Toast.LENGTH_SHORT).show()
+        deployAlarms()
+    }
+
+    private fun deployAlarms() {
+        val dbHandler = AlarmDAO(requireContext())
+        val alarmList = dbHandler.getAllAlarms()
+
+        recyclerView.adapter = AlarmAdapter2(requireContext(), alarmList)
+    }
 }

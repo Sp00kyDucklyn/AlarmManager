@@ -1,57 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="8dp"
-    app:cardMaxElevation="5dp"
-    >
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bg_rounded">
+
+    <ImageButton
+        android:id="@+id/btnOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="?android:selectableItemBackground"
+        android:padding="8dp"
+        android:src="@drawable/baseline_more_vert_24" />
+
+    <TextView
+        android:id="@+id/tvAlarmTime"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="@color/textMainAlarm"
+        android:paddingEnd="8dp"
+        android:text="Alarm Time"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="338dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textColor="@color/black"
-                android:textSize="19sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/subTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="6dp"
-                android:text="Title"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+        android:gravity="start|center_vertical">
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_baseline_arrow_drop_down_circle_24"
+            android:id="@+id/iconDays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_calendar_today_24"
+            android:layout_marginEnd="8dp"/>
 
-            />
-
+        <TextView
+            android:id="@+id/tvAlarmDays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textMainAlarm"
+            android:text="Alarm Days"/>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="start|center_vertical">
+
+        <ImageView
+            android:id="@+id/iconMusic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_notifications_active_24"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/tvAlarmMusic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textMainAlarm"
+            android:text="Alarm Music"/>
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/switchAlarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="16dp"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+</LinearLayout>
