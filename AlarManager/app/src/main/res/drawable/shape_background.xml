@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle">
+        <corners android:radius="40dp" /> <!-- Aquí puedes ajustar el radio para hacer las esquinas más o menos redondeadas -->
+        <solid android:color="#311467" /> <!-- Puedes cambiar el color de fondo aquí -->
+        <stroke android:color="@color/black"/>
+</shape>
