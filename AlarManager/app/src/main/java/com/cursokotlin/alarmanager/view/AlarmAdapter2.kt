@@ -30,7 +30,7 @@ class AlarmAdapter2(private val context: Context, private val alarmList: List<Al
 
         //ajustar márgenes
         val layoutParams = holder.itemView.layoutParams as RecyclerView.LayoutParams
-        layoutParams.setMargins(56, 36, 56, 36)
+        layoutParams.setMargins(56, 16, 56, 16)
         holder.itemView.layoutParams = layoutParams
     }
 
