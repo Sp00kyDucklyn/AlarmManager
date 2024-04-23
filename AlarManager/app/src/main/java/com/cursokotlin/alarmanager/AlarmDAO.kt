@@ -5,7 +5,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.net.Uri
 import com.cursokotlin.alarmanager.model.AlarmData
+import com.cursokotlin.alarmanager.model.State
 
 class AlarmDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
@@ -16,10 +18,12 @@ class AlarmDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         private const val KEY_ID = "id"
         private const val KEY_HOUR = "hour"
         private const val KEY_DAYS = "days"
+        private const val KEY_TONE = "tone"
+        private const val KEY_STATE = "state"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val createTable = ("CREATE TABLE IF NOT EXISTS $TABLE_ALARMS($KEY_ID INTEGER PRIMARY KEY, $KEY_HOUR TEXT, $KEY_DAYS TEXT)")
+        val createTable = ("CREATE TABLE IF NOT EXISTS $TABLE_ALARMS($KEY_ID INTEGER PRIMARY KEY AUTOINCREMENT, $KEY_HOUR TEXT, $KEY_DAYS TEXT, $KEY_TONE TEXT, $KEY_STATE TEXT)")
         db.execSQL(createTable)
     }
 
@@ -33,10 +37,49 @@ class AlarmDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         val values = ContentValues()
         values.put(KEY_HOUR, alarmData.alarmHour)
         values.put(KEY_DAYS, alarmData.alarmDays)
+        values.put(KEY_TONE, alarmData.alarmTone.toString())
+        values.put(KEY_STATE, alarmData.alarmState.toString())
 
         db.insert(TABLE_ALARMS, null, values)
         db.close()
     }
+
+    fun updateAlarm(alarmData: AlarmData) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(KEY_HOUR, alarmData.alarmHour)
+        values.put(KEY_DAYS, alarmData.alarmDays)
+        values.put(KEY_TONE, alarmData.alarmTone.toString())
+        values.put(KEY_STATE, alarmData.alarmState.toString())
+
+        db.update(TABLE_ALARMS, values, "$KEY_ID = ?", arrayOf(alarmData.alarmId.toString()))
+        db.close()
+    }
+    @SuppressLint("Range")
+    fun getAlarmById(alarmId: Int): AlarmData? {
+        val db = this.readableDatabase
+        var alarmData: AlarmData? = null
+        val selectQuery = "SELECT * FROM $TABLE_ALARMS WHERE $KEY_ID = ?"
+        val cursor = db.rawQuery(selectQuery, arrayOf(alarmId.toString()))
+
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val hour = it.getString(it.getColumnIndex(KEY_HOUR))
+                val days = it.getString(it.getColumnIndex(KEY_DAYS))
+                val toneUri = Uri.parse(it.getString(it.getColumnIndex(KEY_TONE)))
+                val state = State.valueOf(it.getString(it.getColumnIndex(KEY_STATE)))
+
+                alarmData = AlarmData(alarmId, hour, days, toneUri, state)
+            }
+        }
+
+        cursor.close()
+        db.close()
+
+        return alarmData
+    }
+
+
 
     @SuppressLint("Range")
     fun getAllAlarms(): ArrayList<AlarmData> {
@@ -51,8 +94,10 @@ class AlarmDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                     val id = it.getInt(it.getColumnIndex(KEY_ID))
                     val hour = it.getString(it.getColumnIndex(KEY_HOUR))
                     val days = it.getString(it.getColumnIndex(KEY_DAYS))
+                    val toneUri = Uri.parse(it.getString(it.getColumnIndex(KEY_TONE)))
+                    val state = State.valueOf(it.getString(it.getColumnIndex(KEY_STATE)))
 
-                    val alarmData = AlarmData(hour, days)
+                    val alarmData = AlarmData(id, hour, days, toneUri, state)
                     alarmList.add(alarmData)
                 } while (it.moveToNext())
             }
