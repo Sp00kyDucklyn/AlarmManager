@@ -36,7 +36,7 @@ class Alarm : Fragment(){
 
     private val REQUEST_CODE_PICK_AUDIO = 123
 
-    private var alarmId by Delegates.notNull<Int>()
+    private var alarmId: Int = 0
     private lateinit var selectedTimeString: String
     private lateinit var selectedDaysString: String
 
@@ -61,6 +61,8 @@ class Alarm : Fragment(){
         userAdapter = AlarmAdapter2(requireContext(), userList)
         recv.adapter = userAdapter
 
+
+
         addsBtn.setOnClickListener { showTimePicker() }
 
         return root
@@ -68,7 +70,7 @@ class Alarm : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        deployAlarms()
+        deployAlarms(requireContext())
 
         // Verifica si se está editando una alarma
         if (editEnabled && editAlarmId != null && !isPickerVisible) {
@@ -161,7 +163,7 @@ class Alarm : Fragment(){
         dbHandler.addAlarm(alarmData)
 
         Toast.makeText(requireContext(), "Alarm added successfully", Toast.LENGTH_SHORT).show()
-        deployAlarms()
+        deployAlarms(requireContext())
     }
 
     private fun updateAlarm(alarmId: Int, timeString: String, daysString: String, alarmTone: Uri){
@@ -170,7 +172,7 @@ class Alarm : Fragment(){
         dbHandler.updateAlarm(alarmData)
 
         Toast.makeText(requireContext(), "Alarm updated successfully", Toast.LENGTH_SHORT).show()
-        deployAlarms()
+        deployAlarms(requireContext())
     }
 
     private fun selectTone() {
@@ -213,12 +215,13 @@ class Alarm : Fragment(){
         }
     }
 
-    private fun deployAlarms() {
-        val dbHandler = AlarmDAO(requireContext())
+    private fun deployAlarms(context: Context) {
+        val dbHandler = AlarmDAO(context)
         val alarmList = dbHandler.getAllAlarms()
 
-        recyclerView.adapter = AlarmAdapter2(requireContext(), alarmList)
+        recyclerView.adapter = AlarmAdapter2(context, alarmList)
     }
+
 
     fun editAlarm(context: Context, alarmId: Int) {
         val dbHandler = AlarmDAO(context)
@@ -227,7 +230,13 @@ class Alarm : Fragment(){
             this.alarmId = alarm.alarmId
         }
         editEnabled = true
-        // No mostrar el selector de tiempo aquí, se mostrará en onViewCreated
+    }
+
+    fun deleteAlarm(context: Context, alarmId: Int) {
+        val dbHandler = AlarmDAO(context)
+        dbHandler.deleteAlarmById(alarmId)
+        Toast.makeText(context, "Alarm deleted successfully", Toast.LENGTH_SHORT).show()
+        //deployAlarms(context)
     }
 
 

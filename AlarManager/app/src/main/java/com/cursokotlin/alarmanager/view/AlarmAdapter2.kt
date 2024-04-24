@@ -70,7 +70,8 @@ class AlarmAdapter2(private val context: Context, private val alarmList: List<Al
                     true
                 }
                 R.id.deleteAlarm -> {
-
+                    val deleteAlarm = Alarm()
+                    deleteAlarm.deleteAlarm(context, currentItem.alarmId)
                     true
                 }
                 else -> false
@@ -101,4 +102,5 @@ class AlarmAdapter2(private val context: Context, private val alarmList: List<Al
             return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
         }
     }.getOrNull()
+
 }

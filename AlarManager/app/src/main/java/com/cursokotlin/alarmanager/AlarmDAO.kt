@@ -55,6 +55,13 @@ class AlarmDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         db.update(TABLE_ALARMS, values, "$KEY_ID = ?", arrayOf(alarmData.alarmId.toString()))
         db.close()
     }
+
+    fun deleteAlarmById(alarmId: Int) {
+        val db = this.writableDatabase
+        db.delete(TABLE_ALARMS, "$KEY_ID = ?", arrayOf(alarmId.toString()))
+        db.close()
+    }
+
     @SuppressLint("Range")
     fun getAlarmById(alarmId: Int): AlarmData? {
         val db = this.readableDatabase
