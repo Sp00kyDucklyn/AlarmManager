@@ -237,6 +237,8 @@ class Alarm : Fragment(){
         dbHandler.deleteAlarmById(alarmId)
         Toast.makeText(context, "Alarm deleted successfully", Toast.LENGTH_SHORT).show()
         //deployAlarms(context)
+        val mainActivity = context as MainActivity
+        mainActivity.goToBedtimeFragment()
     }
 
 
