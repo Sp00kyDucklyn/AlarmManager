@@ -25,5 +25,17 @@
         <action
             android:id="@+id/action_bedtime_to_alarm2"
             app:popUpTo="@id/alarmFragment" />
+        <action
+            android:id="@+id/action_bedtimeFragment_to_start_Sleep"
+            app:destination="@id/start_Sleep" />
+    </fragment>
+    <fragment
+        android:id="@+id/start_Sleep"
+        android:name="com.cursokotlin.alarmanager.Start_Sleep"
+        android:label="fragment_start__sleep"
+        tools:layout="@layout/fragment_start__sleep" >
+        <action
+            android:id="@+id/action_start_Sleep_to_bedtimeFragment"
+            app:destination="@id/bedtimeFragment" />
     </fragment>
 </navigation>

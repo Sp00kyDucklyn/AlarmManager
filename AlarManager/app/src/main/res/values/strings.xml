@@ -5,4 +5,228 @@
     <string name="alarm">Alarm</string>
     <string name="bedtime">Bedtime</string>
     <string name="alarmSub1">AI generated alarm</string>
+
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="start_again">Start again</string>
+    <string name="press_start">Press the button below to begin tracking</string>
+    <string name="stopped_on">Stopped on</string>
+    <string name="started_on">Started on</string>
+    <string name="slept_for_label">Slept for</string>
+    <string name="awake_for_label">Awake for</string>
+    <string name="sleeps">Sleeps</string>
+    <string name="status">Status</string>
+    <string name="import_file_item">Import File</string>
+    <string name="import_calendar_item">Import from Calendar</string>
+    <string name="export_file_item">Export to File</string>
+    <string name="export_calendar_item">Export to Calendar</string>
+    <string name="import_success">Import finished successfully</string>
+    <string name="export_success">Export finished successfully</string>
+    <string name="export_failure">Export failed: %s</string>
+    <string name="sleeping_since">Sleeping since %s</string>
+    <string name="past">Past sleeps</string>
+    <string name="tracking_stopped">Tracking stopped</string>
+    <string name="deleted">Deleted</string>
+    <string name="undo">Undo</string>
+    <string name="about_item">About</string>
+    <string name="about_toolbar">About</string>
+    <string name="app_description">A simple sleep tracker for Android.</string>
+    <string name="sleep_id">Sleep #%s</string>
+    <string name="website_link" translatable="false">https://vmiklos.hu/plees-tracker</string>
+    <string name="documentation">Documentation</string>
+    <string name="average_string">Average</string>
+    <string name="daily_average_string">Daily</string>
+    <string name="dashboard">Dashboard (%s)</string>
+    <string name="sleep_details">Sleep Details</string>
+    <string name="settings">Settings</string>
+    <string name="settings_category_theme">Theme (May Require Restart)</string>
+    <string name="settings_follow_system_theme">Follow System Theme</string>
+    <string name="settings_enable_dark_theme">Dark Mode</string>
+    <string name="stats">Statistics</string>
+    <string name="delete_all_sleep">Delete All Sleep</string>
+    <string name="notification_channel_name">Tracker notifications</string>
+    <string name="select_calendar_dialog_title">Select Calendar</string>
+    <string name="select_calendar_dialog_negative">Cancel</string>
+    <string name="select_calendar_dialog_positive">Select</string>
+    <string name="import_dialog_error_message">No calendars were found</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="calendar_permission_required">Calendar permission required</string>
+    <plurals name="imported_items">
+        <item quantity="one">Imported %d item</item>
+        <item quantity="other">Imported %d items</item>
+    </plurals>
+    <string name="exported_event_description">Exported from Plees Tracker</string>
+    <string name="exported_event_title" translatable="false">Plees Tracker Sleep</string>
+    <plurals name="exported_items">
+        <item quantity="one">Exported %d item</item>
+        <item quantity="other">Exported %d items</item>
+    </plurals>
+    <string name="settings_category_backup">Backup</string>
+    <string name="settings_automatic_backup">Automatic backup</string>
+    <string name="settings_compact_view">Compact view: no seconds and timezone</string>
+    <string name="settings_backup_path">Backup path</string>
+    <string name="widget_start_stop">Toggle tracking</string>
+    <string name="settings_category_dashboard">Dashboard</string>
+    <string name="settings_dashboard_duration">Duration</string>
+    <string name="settings_etc">Miscellaneous</string>
+    <string name="settings_enable_dnd">Do not disturb when tracking</string>
+    <string name="settings_enable_dnd_q_title">Permissions Required</string>
+    <string name="settings_enable_dnd_q_message">Please allow Do Not Disturb permissions for this app on the next screen.</string>
+    <string name="settings_enable_dnd_q_ok">OK</string>
+    <string name="settings_enable_dnd_q_cancel">Cancel</string>
+    <string name="last_week">Last week</string>
+    <string name="last_two_weeks">Last two weeks</string>
+    <string name="last_month">Last month</string>
+    <string name="last_year">Last year</string>
+    <string name="all_time">All time</string>
+    <string-array name="duration_entries">
+        <item>@string/last_week</item>
+        <item>@string/last_two_weeks</item>
+        <item>@string/last_month</item>
+        <item>@string/last_year</item>
+        <item>@string/all_time</item>
+    </string-array>
+    <string-array name="duration_entry_values">
+        <item>"-7"</item>
+        <item>"-14"</item>
+        <item>"-30"</item>
+        <item>"-365"</item>
+        <item>"0"</item>
+    </string-array>
+    <string name="graphs">Graphs</string>
+    <string name="graph_deficit">Deficit/surplus</string>
+    <string name="graph_length">Length</string>
+    <string name="graph_start">Start time</string>
+    <string name="graph_stop">Stop time</string>
+    <string name="graph_rating">Rating</string>
+    <string name="graph_average">Average</string>
+    <string name="graph_variance">Variance</string>
+    <string name="graph_deviation">Standard deviation</string>
+    <string name="graph_total">Total</string>
+    <string name="graph_hours">Hours</string>
+    <string name="graph_ideal">Ideal</string>
+    <string name="settings_ideal_sleep_length">Ideal sleep length</string>
+    <string name="hours_2">"2 hours"</string>
+    <string name="hours_2_30">"2 hours 30 minutes"</string>
+    <string name="hours_3">"3 hours"</string>
+    <string name="hours_3_30">"3 hours 30 minutes"</string>
+    <string name="hours_4">"4 hours"</string>
+    <string name="hours_4_30">"4 hours 30 minutes"</string>
+    <string name="hours_5">"5 hours"</string>
+    <string name="hours_5_30">"5 hours 30 minutes"</string>
+    <string name="hours_6">"6 hours"</string>
+    <string name="hours_6_30">"6 hours 30 minutes"</string>
+    <string name="hours_7">"7 hours"</string>
+    <string name="hours_7_30">"7 hours 30 minutes"</string>
+    <string name="hours_8">"8 hours"</string>
+    <string name="hours_8_30">"8 hours 30 minutes"</string>
+    <string name="hours_9">"9 hours"</string>
+    <string name="hours_9_30">"9 hours 30 minutes"</string>
+    <string name="hours_10">"10 hours"</string>
+    <string name="hours_10_30">"10 hours 30 minutes"</string>
+    <string name="hours_11">"11 hours"</string>
+    <string name="hours_11_30">"11 hours 30 minutes"</string>
+    <string name="hours_12">"12 hours"</string>
+    <string name="hours_12_30">"12 hours 30 minutes"</string>
+    <string name="hours_13">"13 hours"</string>
+    <string name="hours_13_30">"13 hours 30 minutes"</string>
+    <string name="hours_14">"14 hours"</string>
+    <string name="settings_sleep_start_delta">Start time delay</string>
+    <string name="minutes_0">0 minutes</string>
+    <string name="minute_1">1 minute</string>
+    <string name="minutes_5">5 minutes</string>
+    <string name="minutes_10">10 minutes</string>
+    <string name="minutes_15">15 minutes</string>
+    <string name="minutes_30">30 minutes</string>
+    <string name="minutes_45">45 minutes</string>
+    <string name="minutes_60">60 minutes</string>
+    <string name="show_rating">Show rating</string>
+    <string name="show_awake_duration">Show awake duration</string>
+    <string name="past_sleeps">Past sleeps</string>
+    <string-array name="ideal_sleep_entries">
+        <item>@string/hours_2</item>
+        <item>@string/hours_2_30</item>
+        <item>@string/hours_3</item>
+        <item>@string/hours_3_30</item>
+        <item>@string/hours_4</item>
+        <item>@string/hours_4_30</item>
+        <item>@string/hours_5</item>
+        <item>@string/hours_5_30</item>
+        <item>@string/hours_6</item>
+        <item>@string/hours_6_30</item>
+        <item>@string/hours_7</item>
+        <item>@string/hours_7_30</item>
+        <item>@string/hours_8</item>
+        <item>@string/hours_8_30</item>
+        <item>@string/hours_9</item>
+        <item>@string/hours_9_30</item>
+        <item>@string/hours_10</item>
+        <item>@string/hours_10_30</item>
+        <item>@string/hours_11</item>
+        <item>@string/hours_11_30</item>
+        <item>@string/hours_12</item>
+        <item>@string/hours_12_30</item>
+        <item>@string/hours_13</item>
+        <item>@string/hours_13_30</item>
+        <item>@string/hours_14</item>
+    </string-array>
+    <string-array name="ideal_sleep_entry_values">
+        <item>"2.0"</item>
+        <item>"2.5"</item>
+        <item>"3.0"</item>
+        <item>"3.5"</item>
+        <item>"4.0"</item>
+        <item>"4.5"</item>
+        <item>"5.0"</item>
+        <item>"5.5"</item>
+        <item>"6.0"</item>
+        <item>"6.5"</item>
+        <item>"7.0"</item>
+        <item>"7.5"</item>
+        <item>"8.0"</item>
+        <item>"8.5"</item>
+        <item>"9.0"</item>
+        <item>"9.5"</item>
+        <item>"10.0"</item>
+        <item>"10.5"</item>
+        <item>"11.0"</item>
+        <item>"11.5"</item>
+        <item>"12.0"</item>
+        <item>"12.5"</item>
+        <item>"13.0"</item>
+        <item>"13.5"</item>
+        <item>"14.0"</item>
+    </string-array>
+    <string-array name="sleep_start_delay_entries">
+        <item>@string/minutes_0</item>
+        <item>@string/minute_1</item>
+        <item>@string/minutes_5</item>
+        <item>@string/minutes_10</item>
+        <item>@string/minutes_15</item>
+        <item>@string/minutes_30</item>
+        <item>@string/minutes_45</item>
+        <item>@string/minutes_60</item>
+    </string-array>
+    <string-array name="sleep_start_delay_entry_values">
+        <item>"0"</item>
+        <item>"1"</item>
+        <item>"5"</item>
+        <item>"10"</item>
+        <item>"15"</item>
+        <item>"30"</item>
+        <item>"45"</item>
+        <item>"60"</item>
+    </string-array>
+    <string name="negative_duration">Not updating the sleep, stop is not after start.</string>
+    <string name="sleep_notes">Notes:</string>
+    <string name="delete_all_message">"Are you sure you want to delete all sleeps?"</string>
+    <string name="delete_all_positive">Yes</string>
+    <string name="delete_all_negative">No</string>
+    <string name="no_sleeps">Your tracked sleeps will appear here. Press Start to create a sleep, tap on a sleep to edit it and swipe away a sleep to delete it. For more info, see the Documentation menu item.</string>
+    <string name="show_average_of_sleep_duration">Show average of sleep durations</string>
+    <string name="show_averege_of_daily_sums">Show average of daily sums</string>
+    <string name="ignore_empty_days">Ignore empty days when showing average of daily sums</string>
+
+    <string name="lightCheck">-</string>
+
 </resources>

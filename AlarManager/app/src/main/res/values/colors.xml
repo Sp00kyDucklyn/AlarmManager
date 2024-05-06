@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="textColor">#000</color>
+    <color name="colorPrimary">#5E35B1</color>
+    <color name="colorPrimaryDark">#5E35B1</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorBackground">#ffffff</color>
+    <color name="colorSurface">#ffffff</color>
+
+    <!-- FAB color -->
+    <color name="colorFabPrimary">#5E35B1</color>
+    <color name="colorFabAccent">#D81B60</color>
+    <color name="colorFabText">#ffffff</color>
+
+    <!-- Dashboard  color-->
+    <color name="dash_nights">#6FCF97</color>
+    <color name="dash_average">#56CCF2</color>
+    <color name="dash_daily">#F2C94C</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="bgMainColor">#271f2a</color>
     <color name="bgNavColor">#533562</color>
     <color name="textMainAlarm">#d7c8de</color>
     <color name="alarmBgColor">#55425e</color>
+    <color name="theme_accent">@color/colorAccent</color>
+    <color name="about_libraries_card_dark">#666666</color>
+
+
 </resources>
