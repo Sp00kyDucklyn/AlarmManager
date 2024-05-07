@@ -20,4 +20,19 @@ class WeekDays(
         if (sunday) daysList.add("Sunday")
         return daysList.joinToString(", ")
     }
+
+    fun setDaysFromString(daysString: String) {
+        val daysArray = daysString.split(",").map { it.trim() }
+        daysArray.forEach { day ->
+            when (day) {
+                "Monday" -> monday = true
+                "Tuesday" -> tuesday = true
+                "Wednesday" -> wednesday = true
+                "Thursday" -> thursday = true
+                "Friday" -> friday = true
+                "Saturday" -> saturday = true
+                "Sunday" -> sunday = true
+            }
+        }
+    }
 }

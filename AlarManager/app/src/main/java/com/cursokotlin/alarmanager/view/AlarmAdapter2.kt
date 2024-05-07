@@ -2,6 +2,7 @@ package com.cursokotlin.alarmanager.view
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -12,9 +13,12 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Switch
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.cursokotlin.alarmanager.Alarm
+import com.cursokotlin.alarmanager.MainActivity
 import com.cursokotlin.alarmanager.R
 import com.cursokotlin.alarmanager.model.AlarmData
 import com.cursokotlin.alarmanager.model.State
@@ -64,11 +68,12 @@ class AlarmAdapter2(private val context: Context, private val alarmList: List<Al
         popupMenu.menuInflater.inflate(R.menu.show_menu, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.editAlarm -> {
-                    val editAlarm = Alarm()
-                    editAlarm.editAlarm(context, currentItem.alarmId)
+                /*R.id.editAlarm -> {
+                    val activity = context as FragmentActivity
+                    val alarmFragment = activity.supportFragmentManager.findFragmentById(R.id.alarmFragment) as Alarm
+                    alarmFragment.editAlarm(context, currentItem.alarmId)
                     true
-                }
+                }*/
                 R.id.deleteAlarm -> {
                     val deleteAlarm = Alarm()
                     deleteAlarm.deleteAlarm(context, currentItem.alarmId)

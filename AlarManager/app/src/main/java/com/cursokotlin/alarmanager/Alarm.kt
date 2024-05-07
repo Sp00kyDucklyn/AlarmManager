@@ -24,13 +24,13 @@ import com.google.android.material.timepicker.TimeFormat
 import kotlin.properties.Delegates
 
 
-class Alarm : Fragment(){
+class Alarm : Fragment() {
 
     private lateinit var addsBtn: FloatingActionButton
     private lateinit var recv: RecyclerView
-    private lateinit var userList:ArrayList<AlarmData>
+    private lateinit var userList: ArrayList<AlarmData>
     private lateinit var userAdapter: AlarmAdapter2
-    private lateinit var picker:MaterialTimePicker
+    private lateinit var picker: MaterialTimePicker
 
     private lateinit var recyclerView: RecyclerView
 
@@ -40,10 +40,9 @@ class Alarm : Fragment(){
     private lateinit var selectedTimeString: String
     private lateinit var selectedDaysString: String
 
-    private var editEnabled: Boolean = false
+    /*private var editEnabled: Boolean = false*/
     private var editAlarmId: Int? = null // Almacena el ID de la alarma que se va a editar
     private var isPickerVisible = false // Indica si el selector de tiempo está visible
-
 
 
     override fun onCreateView(
@@ -71,12 +70,6 @@ class Alarm : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         deployAlarms(requireContext())
-
-        // Verifica si se está editando una alarma
-        if (editEnabled && editAlarmId != null && !isPickerVisible) {
-            // Muestra el selector de tiempo si se está editando una alarma y no está visible
-            showTimePicker()
-        }
     }
 
     private fun showTimePicker() {
@@ -105,7 +98,6 @@ class Alarm : Fragment(){
             showDaysOfWeekDialog(timeString)
         }
 
-        // Asegúrate de que el fragmento esté adjunto a la actividad antes de mostrar el selector de tiempo
         if (!isAdded || picker.isVisible || isPickerVisible) {
             return
         }
@@ -166,7 +158,7 @@ class Alarm : Fragment(){
         deployAlarms(requireContext())
     }
 
-    private fun updateAlarm(alarmId: Int, timeString: String, daysString: String, alarmTone: Uri){
+    private fun updateAlarm(alarmId: Int, timeString: String, daysString: String, alarmTone: Uri) {
         val alarmData = AlarmData(alarmId, timeString, daysString, alarmTone, alarmState = State.ON)
         val dbHandler = AlarmDAO(requireContext())
         dbHandler.updateAlarm(alarmData)
@@ -208,10 +200,8 @@ class Alarm : Fragment(){
     }
 
     private fun handleSelectedDataAlarm(audioUri: Uri?) {
-        if (audioUri != null && !editEnabled) {
+        if (audioUri != null) {
             createAlarm(0, selectedTimeString, selectedDaysString, audioUri)
-        }else if (audioUri != null){
-            updateAlarm(alarmId, selectedTimeString, selectedDaysString, audioUri)
         }
     }
 
@@ -220,16 +210,6 @@ class Alarm : Fragment(){
         val alarmList = dbHandler.getAllAlarms()
 
         recyclerView.adapter = AlarmAdapter2(context, alarmList)
-    }
-
-
-    fun editAlarm(context: Context, alarmId: Int) {
-        val dbHandler = AlarmDAO(context)
-        val alarm = dbHandler.getAlarmById(alarmId)
-        if (alarm != null) {
-            this.alarmId = alarm.alarmId
-        }
-        editEnabled = true
     }
 
     fun deleteAlarm(context: Context, alarmId: Int) {
@@ -241,5 +221,124 @@ class Alarm : Fragment(){
         mainActivity.goToBedtimeFragment()
     }
 
-
 }
+
+    /*private fun showEditAlarmDialog(alarmData: AlarmData) {
+        val hour = alarmData.alarmHour
+        val days = alarmData.alarmDays
+        val alarmTone = alarmData.alarmTone
+
+        val picker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(hour.substringBefore(":").toInt())
+            .setMinute(hour.substringAfter(":").toInt())
+            .setTitleText("Edit Alarm Time")
+            .build()
+
+        picker.addOnCancelListener {
+            isPickerVisible = false
+        }
+
+        picker.addOnDismissListener {
+            isPickerVisible = false
+        }
+
+        picker.addOnPositiveButtonClickListener {
+            isPickerVisible = false
+            val newHour = String.format("%02d:%02d", picker.hour, picker.minute)
+            showEditDaysOfWeekDialog(alarmData, newHour)
+        }
+
+        // Verifica si el fragmento está adjunto antes de mostrar el picker
+        if (!isAdded || picker.isVisible || isPickerVisible) {
+            return
+        }
+
+        isPickerVisible = true
+        picker.show(childFragmentManager, "EditAlarmPicker")
+    }
+
+    private fun showEditDaysOfWeekDialog(alarmData: AlarmData, timeString: String) {
+        val weekDays = WeekDays()
+        weekDays.setDaysFromString(alarmData.alarmDays)
+
+        val daysOfWeek = arrayOf(
+            "Monday", "Tuesday", "Wednesday",
+            "Thursday", "Friday", "Saturday", "Sunday"
+        )
+
+        val checkedDays = booleanArrayOf(
+            weekDays.monday, weekDays.tuesday, weekDays.wednesday,
+            weekDays.thursday, weekDays.friday, weekDays.saturday, weekDays.sunday
+        )
+
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Edit Days of the Week")
+        alertDialogBuilder.setMultiChoiceItems(daysOfWeek, checkedDays) { _, which, isChecked ->
+            when (which) {
+                0 -> weekDays.monday = isChecked
+                1 -> weekDays.tuesday = isChecked
+                2 -> weekDays.wednesday = isChecked
+                3 -> weekDays.thursday = isChecked
+                4 -> weekDays.friday = isChecked
+                5 -> weekDays.saturday = isChecked
+                6 -> weekDays.sunday = isChecked
+            }
+        }
+
+        alertDialogBuilder.setPositiveButton("Ok") { dialog, _ ->
+            val daysString = weekDays.getAllDaysAsString()
+            selectedTimeString = timeString
+            selectedDaysString = daysString
+            showEditTonePicker(alarmData)
+            dialog.dismiss()
+        }
+
+        alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        alertDialogBuilder.create().show()
+    }
+
+    private fun showEditTonePicker(alarmData: AlarmData) {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Select New Alarm Tone")
+        alertDialogBuilder.setPositiveButton("Pick File") { dialog, _ ->
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "audio/*"
+
+            startActivityForResult(intent, REQUEST_CODE_PICK_AUDIO)
+
+            dialog.dismiss()
+        }
+
+        alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+            val defaultRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            handleEditAlarmTone(alarmData, defaultRingtoneUri)
+            dialog.dismiss()
+        }
+
+        alertDialogBuilder.create().show()
+    }
+
+    private fun handleEditAlarmTone(alarmData: AlarmData, audioUri: Uri?) {
+        if (audioUri != null) {
+            updateAlarm(alarmData.alarmId, selectedTimeString, selectedDaysString, audioUri)
+        } else {
+            updateAlarm(alarmData.alarmId, selectedTimeString, selectedDaysString, alarmData.alarmTone)
+        }
+    }
+
+    fun editAlarm(context: Context, alarmId: Int) {
+        val dbHandler = AlarmDAO(context)
+        val alarm = dbHandler.getAlarmById(alarmId)
+        if (alarm != null) {
+            this.alarmId = alarm.alarmId
+            println("EDITAR AAAA")
+            showTimePicker()
+        }
+    }
+    */
+     */
