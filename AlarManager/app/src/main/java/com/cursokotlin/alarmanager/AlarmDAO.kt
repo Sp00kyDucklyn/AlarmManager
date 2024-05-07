@@ -115,4 +115,14 @@ class AlarmDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
 
         return alarmList
     }
+
+    fun updateAlarmState(alarmId: Int, state: State) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(KEY_STATE, state.name)
+        }
+
+        db.update(TABLE_ALARMS, values, "$KEY_ID=?", arrayOf(alarmId.toString()))
+        db.close()
+    }
 }

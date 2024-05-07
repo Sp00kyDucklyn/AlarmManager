@@ -18,6 +18,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.cursokotlin.alarmanager.Alarm
+import com.cursokotlin.alarmanager.AlarmDAO
 import com.cursokotlin.alarmanager.MainActivity
 import com.cursokotlin.alarmanager.R
 import com.cursokotlin.alarmanager.model.AlarmData
@@ -94,6 +95,21 @@ class AlarmAdapter2(private val context: Context, private val alarmList: List<Al
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         val switchAlarm: Switch = itemView.findViewById(R.id.switchAlarm)
         val btnOptions: ImageButton = itemView.findViewById(R.id.btnOptions)
+
+        init {
+            switchAlarm.setOnCheckedChangeListener { _, isChecked ->
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val alarm = alarmList[position]
+                    val dbHandler = AlarmDAO(itemView.context)
+                    if (isChecked) {
+                        dbHandler.updateAlarmState(alarm.alarmId, State.ON)
+                    } else {
+                        dbHandler.updateAlarmState(alarm.alarmId, State.OFF)
+                    }
+                }
+            }
+        }
     }
 
     fun Context.getFileName(uri: Uri): String? = when(uri.scheme) {
