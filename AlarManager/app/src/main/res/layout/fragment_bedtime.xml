@@ -154,8 +154,8 @@
                 android:id="@+id/start_stop_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="16dp"
+                android:layout_marginTop="325dp"
+                android:layout_marginLeft="280dp"
                 android:animateLayoutChanges="true"
                 android:background="@drawable/fab_btn_corner"
                 android:gravity="center_vertical">

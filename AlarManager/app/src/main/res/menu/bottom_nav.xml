@@ -8,4 +8,8 @@
         android:id="@+id/menu_Bedtime"
         android:icon="@drawable/ic_baseline_bedtime_24"
         android:title="@string/bedtime" />
+    <item
+        android:id="@+id/menu_Graphs"
+        android:icon="@drawable/ic_baseline_stacked_line_chart_24"
+        android:title="@string/graphs" />
 </menu>

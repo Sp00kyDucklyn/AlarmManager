@@ -13,7 +13,9 @@
         android:id="@+id/start_stop_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/lightCheck" />
+        android:text="@string/lightCheck"
+        tools:layout_editor_absoluteX="142dp"
+        tools:layout_editor_absoluteY="236dp" />
 
     <LinearLayout
         android:id="@+id/stop_layout"
@@ -24,8 +26,10 @@
         android:animateLayoutChanges="true"
         android:background="@drawable/fab_btn_corner"
         android:gravity="center_vertical"
-        tools:layout_editor_absoluteX="151dp"
-        tools:layout_editor_absoluteY="442dp">
+        app:layout_constraintBottom_toBottomOf="@+id/start_stop_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/start_stop_text"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/start_stop"

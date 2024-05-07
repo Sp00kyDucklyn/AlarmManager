@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_alarm_to_bedtime"
             app:destination="@id/bedtimeFragment" />
+        <action
+            android:id="@+id/action_alarmFragment_to_graphs"
+            app:destination="@id/graphsFragment" />
     </fragment>
     <fragment
         android:id="@+id/bedtimeFragment"
@@ -28,6 +31,9 @@
         <action
             android:id="@+id/action_bedtimeFragment_to_start_Sleep"
             app:destination="@id/start_Sleep" />
+        <action
+            android:id="@+id/action_bedtimeFragment_to_graphs"
+            app:destination="@id/graphsFragment" />
     </fragment>
     <fragment
         android:id="@+id/start_Sleep"
@@ -36,6 +42,17 @@
         tools:layout="@layout/fragment_start__sleep" >
         <action
             android:id="@+id/action_start_Sleep_to_bedtimeFragment"
+            app:destination="@id/bedtimeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/graphsFragment"
+        android:name="com.cursokotlin.alarmanager.Graphs"
+        android:label="Graphs" >
+        <action
+            android:id="@+id/action_graphs_to_alarmFragment"
+            app:destination="@id/alarmFragment" />
+        <action
+            android:id="@+id/action_graphs_to_bedtimeFragment"
             app:destination="@id/bedtimeFragment" />
     </fragment>
 </navigation>

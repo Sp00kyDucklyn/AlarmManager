@@ -3,6 +3,7 @@ package com.cursokotlin.alarmanager
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +24,7 @@ import com.cursokotlin.alarmanager.view.AlarmAdapter2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import kotlin.properties.Delegates
+import java.util.Calendar
 
 
 class Alarm : Fragment() {
@@ -35,7 +38,8 @@ class Alarm : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     private val REQUEST_CODE_PICK_AUDIO = 123
-
+    private val EXTRA_SERVICE_ID = "service_id"
+    private val EXTRA_DELAY = "delay"
     private var alarmId: Int = 0
     private lateinit var selectedTimeString: String
     private lateinit var selectedDaysString: String
@@ -70,9 +74,40 @@ class Alarm : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         deployAlarms(requireContext())
+        requestNotificationPermissions()
+    }
+    private val REQUEST_NOTIFICATION_PERMISSION = 1
+
+    private fun requestNotificationPermissions() {
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
+            // Si el permiso no está otorgado, solicita el permiso
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), android.Manifest.permission.VIBRATE)) {
+                // Si el usuario ha rechazado el permiso previamente, muestra un diálogo explicativo
+                showPermissionExplanationDialog()
+            } else {
+                // Si es la primera vez que se solicita el permiso o si el usuario marcó "No volver a preguntar", solicita el permiso directamente
+                requestPermissions(arrayOf(android.Manifest.permission.VIBRATE), REQUEST_NOTIFICATION_PERMISSION)
+            }
+        }
     }
 
+    private fun showPermissionExplanationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Permission Needed")
+            .setMessage("This app requires notification permission to function properly.")
+            .setPositiveButton("OK") { _, _ ->
+                // Cuando el usuario hace clic en Aceptar, solicita el permiso
+                requestPermissions(arrayOf(android.Manifest.permission.VIBRATE), REQUEST_NOTIFICATION_PERMISSION)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                // Cuando el usuario hace clic en Cancelar, cierra el diálogo
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
     private fun showTimePicker() {
+
         picker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
             .setHour(12)
@@ -153,11 +188,89 @@ class Alarm : Fragment() {
 
         val dbHandler = AlarmDAO(requireContext())
         dbHandler.addAlarm(alarmData)
-
-        Toast.makeText(requireContext(), "Alarm added successfully", Toast.LENGTH_SHORT).show()
+        val hoursUntilAlarm = calculateMinutesUntilAlarm(timeString, daysString)
+        println(hoursUntilAlarm)
+        val toastMessage = if (hoursUntilAlarm > 0) {
+            "Alarm added successfully. Alarm will go off in $hoursUntilAlarm minutos."
+        } else {
+            "Alarm added successfully. Alarm will go off soon."
+        }
+        Toast.makeText(requireContext(), toastMessage , Toast.LENGTH_SHORT).show()
         deployAlarms(requireContext())
+        val dinero :Long =((hoursUntilAlarm*60*1000).toLong())
+            startService(0,dinero)
+    }
+    private fun startService(serviceId: Int, delayMillis: Long) {
+        val serviceIntent = Intent(requireContext(), NotificationService::class.java)
+        serviceIntent.putExtra(EXTRA_SERVICE_ID, serviceId)
+        serviceIntent.putExtra(EXTRA_DELAY, delayMillis)
+        requireContext().startService(serviceIntent)
     }
 
+    private fun calculateMinutesUntilAlarm(timeString: String, daysString: String): Int {
+        val calendar = Calendar.getInstance()
+        val currentDay = calendar.get(Calendar.DAY_OF_WEEK) // 1 for Sunday, 2 for Monday, ..., 7 for Saturday
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+
+        // Parsea la hora seleccionada para la alarma
+        val parts = timeString.split(":")
+        val selectedHour = parts[0].toInt()
+        val selectedMinute = parts[1].toInt()
+
+        // Obtenemos el día actual en formato de cadena
+        val currentDayName = getDayOfWeek(currentDay)
+
+        // Verificamos si el día actual está seleccionado para la alarma
+        val selectedDays = daysString.split(",")
+        val daysDifference = daysDifference(currentDayName, selectedDays)
+        println("hora "+selectedHour+"current"+currentHour)
+        // Calcula la diferencia de tiempo en minutos
+        var hoursDifference = selectedHour - currentHour
+        val minutesDifference = selectedMinute - currentMinute
+
+        if (hoursDifference < 0 || (hoursDifference == 0 && minutesDifference < 0)) {
+            // Si la alarma está programada para después de la hora actual, suma 24 horas
+            hoursDifference += 24
+        }
+
+        val totalMinutesDifference = (daysDifference * 24 * 60) + (hoursDifference * 60) + minutesDifference
+        return if (totalMinutesDifference >= 0) totalMinutesDifference else 0
+    }
+
+    private fun daysDifference(currentDay: String, selectedDays: List<String>): Int {
+        val currentIndex = selectedDays.indexOf(currentDay)
+        val selectedDaysCount = selectedDays.size
+
+        if (currentIndex != -1) {
+            // Si el día actual está en la lista de días seleccionados, la diferencia es cero
+            return 0
+        } else {
+            // Si el día actual no está en la lista, encontramos el siguiente día en la lista
+            var nextIndex = (currentIndex + 1) % selectedDaysCount
+            var counter = 1 // Iniciamos en 1 porque ya hemos avanzado un día
+
+            // Buscamos el siguiente día en la lista, teniendo en cuenta la posibilidad de llegar al final de la lista
+            while (selectedDays[nextIndex] != currentDay && counter < selectedDaysCount) {
+                nextIndex = (nextIndex + 1) % selectedDaysCount
+                counter++
+            }
+
+            return counter
+        }
+    }
+    private fun getDayOfWeek(day: Int): String {
+        return when (day) {
+            Calendar.SUNDAY -> "Sunday"
+            Calendar.MONDAY -> "Monday"
+            Calendar.TUESDAY -> "Tuesday"
+            Calendar.WEDNESDAY -> "Wednesday"
+            Calendar.THURSDAY -> "Thursday"
+            Calendar.FRIDAY -> "Friday"
+            Calendar.SATURDAY -> "Saturday"
+            else -> throw IllegalArgumentException("Invalid day of week")
+        }
+    }
     private fun updateAlarm(alarmId: Int, timeString: String, daysString: String, alarmTone: Uri) {
         val alarmData = AlarmData(alarmId, timeString, daysString, alarmTone, alarmState = State.ON)
         val dbHandler = AlarmDAO(requireContext())
