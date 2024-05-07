@@ -61,11 +61,14 @@ class Bedtime : Fragment(), SensorEventListener {
             }
         }
     }
+    public fun gle(viewModel: MainViewModel){
 
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        println("PASO POR AQUI")
         val root = inflater.inflate(R.layout.fragment_bedtime, container, false)
 
         //textView = root.findViewById(R.id.start_stop)
@@ -80,9 +83,14 @@ class Bedtime : Fragment(), SensorEventListener {
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
-        sharedPreferenceListener.applyTheme(PreferenceManager.getDefaultSharedPreferences(requireContext()))
+        sharedPreferenceListener.applyTheme(
+            PreferenceManager.getDefaultSharedPreferences(
+                requireContext()
+            )
+        )
 
-        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
+        val preferences =
+            PreferenceManager.getDefaultSharedPreferences(requireContext().applicationContext)
         preferences.registerOnSharedPreferenceChangeListener(sharedPreferenceListener)
         DataModel.init(requireContext().applicationContext, preferences)
 
@@ -106,9 +114,9 @@ class Bedtime : Fragment(), SensorEventListener {
                 val stats = fragments.findFragmentById(R.id.dashboard_body)?.view
                 //val layout = stats?.findViewById<LinearLayout>(R.id.fragment_stats_average_layout)
                 //if (it) {
-                    //layout?.visibility = View.VISIBLE
+                //layout?.visibility = View.VISIBLE
                 //} else {
-                  //  layout?.visibility = View.GONE
+                //  layout?.visibility = View.GONE
                 //}
             }
         }
@@ -120,10 +128,10 @@ class Bedtime : Fragment(), SensorEventListener {
                 val stats = fragments.findFragmentById(R.id.dashboard_body)?.view
                 //val layout = stats?.findViewById<LinearLayout>(R.id.fragment_stats_daily_layout)
                 //if (it) {
-                  //  layout?.visibility = View.VISIBLE
+                //  layout?.visibility = View.VISIBLE
                 //} else {
-                   // layout?.visibility = View.GONE
-               // }
+                // layout?.visibility = View.GONE
+                // }
             }
         }
 
@@ -212,9 +220,8 @@ class Bedtime : Fragment(), SensorEventListener {
         // See if the activity is triggered from the widget. If so, toggle the start/stop state.
         handleIntent(requireActivity().intent)
 
-
+        DataModel.start==null
         detenerSueño()
-
 
         updateView()
 
@@ -282,11 +289,17 @@ class Bedtime : Fragment(), SensorEventListener {
     // Método para detener el sueño una vez que se regrese al fragmento Bedtime desde StartSleep
     private fun detenerSueño() {
         // Actualizar el modelo de datos (DataModel) según sea necesario
-        DataModel.stop = Calendar.getInstance().time
-        // Llamar al método para detener el sueño en el ViewModel
-        viewModel.stopSleep(requireContext().applicationContext, requireContext().contentResolver)
-        // Llamar al método para actualizar la vista en el fragmento Bedtime
-        updateView()
+        println("1"+DataModel.start)
+        if(DataModel.start!=null){
+            DataModel.stop = Calendar.getInstance().time
+            // Llamar al método para detener el sueño en el ViewModel
+            viewModel.stopSleep(requireContext().applicationContext, requireContext().contentResolver)
+            // Llamar al método para actualizar la vista en el fragmento Bedtime
+            updateView()
+            DataModel.start=null
+            println("2"+DataModel.start)
+        }
+
     }
 
     private fun createColorStateList(color: Int): ColorStateList {

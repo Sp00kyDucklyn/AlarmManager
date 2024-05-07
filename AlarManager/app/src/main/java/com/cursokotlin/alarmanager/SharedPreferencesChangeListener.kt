@@ -1,8 +1,4 @@
-/*
- * Copyright 2023 Miklos Vajna
- *
- * SPDX-License-Identifier: MIT
- */
+
 
 package com.cursokotlin.alarmanager
 

@@ -80,6 +80,7 @@ class Start_Sleep : Fragment() {
 
             if (DataModel.start != null && DataModel.stop != null) {
                 // When user stops tracking sleep
+
                 if (dndEnabled && dndManager.isNotificationPolicyAccessGranted) {
                     // Restore Do Not Disturb status when user started tracking
                     val filterAll = NotificationManager.INTERRUPTION_FILTER_ALL
@@ -93,7 +94,6 @@ class Start_Sleep : Fragment() {
         }
 
         //handleIntent(requireActivity().intent)
-
         return root
     }
 

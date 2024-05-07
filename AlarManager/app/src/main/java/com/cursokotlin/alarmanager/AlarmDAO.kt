@@ -11,7 +11,7 @@ import com.cursokotlin.alarmanager.model.State
 
 class AlarmDAO(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3
         private const val DATABASE_NAME = "AlarmDatabase"
         private const val TABLE_ALARMS = "alarms"
 
