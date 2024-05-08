@@ -106,7 +106,7 @@ class Alarm : Fragment() {
             .create()
             .show()
     }
-    private fun showTimePicker() {
+    fun showTimePicker() {
 
         picker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
