@@ -204,9 +204,16 @@ class Bedtime : Fragment(), SensorEventListener {
         findNavController().navigate(R.id.action_bedtimeFragment_to_start_Sleep)
     }
 
+    // Método para detener el sueño una vez que se regrese al fragmento Bedtime desde StartSleep
     private fun detenerSueño() {
+        // Actualizar el modelo de datos (DataModel) según sea necesario
+        println("1"+DataModel.start)
+
         if(DataModel.start!=null){
-            DataModel.stop = Calendar.getInstance().time
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.HOUR_OF_DAY, 8)
+            DataModel.stop = calendar.time
+            // Llamar al método para detener el sueño en el ViewModel
             viewModel.stopSleep(requireContext().applicationContext, requireContext().contentResolver)
             updateView()
             DataModel.start=null
