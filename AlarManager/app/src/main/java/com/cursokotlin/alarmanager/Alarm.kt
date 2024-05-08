@@ -197,13 +197,15 @@ class Alarm : Fragment() {
         }
         Toast.makeText(requireContext(), toastMessage , Toast.LENGTH_SHORT).show()
         deployAlarms(requireContext())
+        val nombre :String= ""+daysString+" "+timeString
         val dinero :Long =((hoursUntilAlarm*60*1000).toLong())
-            startService(0,dinero)
+            startService(0,dinero,nombre)
     }
-    private fun startService(serviceId: Int, delayMillis: Long) {
+    private fun startService(serviceId: Int, delayMillis: Long,nombre:String) {
         val serviceIntent = Intent(requireContext(), NotificationService::class.java)
         serviceIntent.putExtra(EXTRA_SERVICE_ID, serviceId)
         serviceIntent.putExtra(EXTRA_DELAY, delayMillis)
+        serviceIntent.putExtra("Nombre", nombre)
         requireContext().startService(serviceIntent)
     }
 

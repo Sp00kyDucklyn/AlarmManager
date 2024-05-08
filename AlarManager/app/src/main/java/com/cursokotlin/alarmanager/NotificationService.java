@@ -20,13 +20,13 @@ import java.util.TimerTask;
 public class NotificationService extends Service {
 
     private static final String EXTRA_DELAY = "delay";
-
+    private  String nombre = "";
     private Timer timer;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Obtener el tiempo de espera del extra del intent
-        System.out.println("entre");
+         nombre = intent.getStringExtra("Nombre");
         long delay = intent.getLongExtra(EXTRA_DELAY, 15000); // 15 segundos por defecto
 
 
@@ -46,13 +46,13 @@ public class NotificationService extends Service {
     }
 
     private void showNotification() {
-        System.out.println("ola");
+
         Uri sound = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/" + R.raw.sound);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "default_notification_channel_id")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Test")
+                .setContentTitle("ALARMA!!")
                 .setSound(sound)
-                .setContentText("Hello! This is my first push notification");
+                .setContentText("Despierta "+nombre);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
